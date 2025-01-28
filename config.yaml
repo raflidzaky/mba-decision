@@ -1,0 +1,14 @@
+feature: 
+  entrepreneurial_interest: "Entrepreneurial Interest"
+  networking_importance: "Networking Importance"
+
+data_split:
+  test_size: 0.1
+  random_state: 123
+
+model:  
+  type: "DecisionTreeClassifier"
+  params: 
+    criterion: "gini"
+    splitter: "best"
+  
