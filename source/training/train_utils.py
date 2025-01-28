@@ -5,6 +5,7 @@ import os
 from pydantic import BaseModel
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+import numpy as np
 
 # Create config loader from config yaml
 class ConfigLoader:
@@ -42,7 +43,7 @@ class DataLoader:
     def load_target(self, dataset):
         target = self.config_loader.get('target', {})
         target_column = list(target.values())
-        data_Y = dataset[target_column]
+        data_Y = np.array(dataset[target_column]).reshape(-1, 1)
         return data_Y
 
     def load_feature(self, dataset):
@@ -53,7 +54,7 @@ class DataLoader:
         feature_columns = list(features.values()) 
 
         # And pass it here
-        data_X = dataset[feature_columns]
+        data_X = np.array(dataset[feature_columns]).reshape(-1, 1)
         return data_X
     
     def train_split(self, X, y):
