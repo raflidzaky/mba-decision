@@ -54,7 +54,7 @@ class DataLoader:
         feature_columns = list(features.values()) 
 
         # And pass it here
-        data_X = np.array(dataset[feature_columns]).reshape(-1, 1)
+        data_X = np.array(dataset[feature_columns])
         return data_X
     
     def train_split(self, X, y):
