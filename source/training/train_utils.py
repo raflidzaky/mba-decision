@@ -85,7 +85,7 @@ class ModelLoader:
 # Def the model training
 class ModelTrainer:
     def __init__(self, model_loader):
-        self.config_loader = model_loader
+        self.model_loader = model_loader
     
     def train_model(self, X_train, y_train):
         model = self.model_loader.load_model()

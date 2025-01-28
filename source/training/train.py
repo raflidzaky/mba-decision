@@ -25,8 +25,8 @@ def run_train_pipeline(config_file, data_file):
     print(f'Model Accuracy: {accuracy:.4f}')
 
 if __name__ == "__main__":
-    config_file = 'C:\Users\Rafli\decision-pursue-mba\config.yaml'
-    data_file = 'C:\Users\Rafli\decision-pursue-mba\source\training\data\mba_decision_dataset.csv' 
+    config_file = 'C:/Users/Rafli/decision-pursue-mba/config.yaml'
+    data_file = 'C:/Users/Rafli/decision-pursue-mba/source/training/data/mba_decision_dataset.csv' 
     
     # Run the pipeline
     trained_model = run_train_pipeline(config_file, data_file)
