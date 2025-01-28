@@ -1,3 +1,6 @@
+target: 
+  mba_decision: "Decided to Pursue MBA?"
+
 feature: 
   entrepreneurial_interest: "Entrepreneurial Interest"
   networking_importance: "Networking Importance"
@@ -11,4 +14,3 @@ model:
   params: 
     criterion: "gini"
     splitter: "best"
-  
