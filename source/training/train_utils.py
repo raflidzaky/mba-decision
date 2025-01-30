@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 import numpy as np
+import pickle
 
 # Create config loader from config yaml
 class ConfigLoader:
@@ -71,6 +72,8 @@ class ModelLoader:
     
     def load_model(self):
         # Load model type and parameters from the YAML config
+        # This load_model is used for "retraining" from scratch
+        # Using the same hyperparameter
         model_config = self.config_loader.get('model', {})
         model_type = model_config.get('type')  # Default to DecisionTreeClassifier if not found
         params = model_config.get('params', {})
@@ -82,6 +85,12 @@ class ModelLoader:
             raise ValueError(f"Model type '{model_type}' is not supported.")
         return model
     
+    def load_serialized_model(self, model_path): 
+        # Load model from serialized one. Useful to just load existing model
+        with open(model_path, 'rb') as f:
+            model = pickle.load(f)
+        return model
+
 # Def the model training
 class ModelTrainer:
     def __init__(self, model_loader):
@@ -91,3 +100,15 @@ class ModelTrainer:
         model = self.model_loader.load_model()
         model.fit(X_train, y_train)
         return model
+    
+    def save_model(self, model, model_path):
+        # Whenever the training is done, it updates a model
+        with open(model_path, 'wb') as f:
+            pickle.dump(model, f)
+            print(f"Model saved successfully")
+
+    def load_model(self, model_path):
+        # This loading function is useful for third-party usage
+        # Such as API or Streamlit
+        with open(model_path, 'rb') as f:
+            model = pickle.load(f)
