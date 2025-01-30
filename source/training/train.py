@@ -15,12 +15,17 @@ def run_train_pipeline(config_file, data_file):
 
     X_train, X_test, y_train, y_test = data_loader.train_split(X=X, 
                                                                y=y)
-    
+    # Load model configuration from YAML
     model_loader  = ModelLoader(config_loader=config_loader)
-    model_trainer = ModelTrainer(model_loader=model_loader)
 
+    # Load training configuration and train the model
+    model_trainer = ModelTrainer(model_loader=model_loader)
     model = model_trainer.train_model(X_train, y_train)
 
+    # Serialize the model
+    model_trainer.save_model(model=model, model_path='trained_detree1.pkl')
+
+    # Check the model
     accuracy = model.score(X_test, y_test)
     print(f'Model Accuracy: {accuracy:.4f}')
 
