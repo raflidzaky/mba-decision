@@ -1,14 +1,25 @@
+# Manage API input and response
 from fastapi import FastAPI
-import uvicorn
-from pydantic import BaseModel
-import numpy as np
-import pickle
 import asyncio
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
+# Manage input shape
+from pydantic import BaseModel
+import numpy as np
+import pickle
+
+# Manage environment variables
+from dotenv import load_dotenv
+import os
+
 # Initialize API app
 app = FastAPI()
+
+# Load environment variables
+load_dotenv()
+MODEL_PATH = os.getenv("MODEL_PATH")
+API_URL = os.getenv("API_URL")
 
 # Serve static files (index.html, JS, CSS, etc.)
 app.mount("/static", StaticFiles(directory="source/static"), name="static")
@@ -20,7 +31,7 @@ class PredictRequest(BaseModel):
 # Make the model asynchronous (can be handled concurrently)
 async def load_model():
     # Load the model asynchronously to avoid blocking other requests (such as GET request for feature or prediction)
-     return await asyncio.to_thread(pickle.load, open('C:/Users/Rafli/decision-pursue-mba/trained_detree1.pkl', 'rb'))
+     return await asyncio.to_thread(pickle.load, open(MODEL_PATH, 'rb'))
 
 # Initialized model as None
 ml_model = None
@@ -39,6 +50,13 @@ async def startup_event():
 @app.get("/", response_class=HTMLResponse)
 def read_root():
     return open("source/static/index.html").read()
+
+@app.get("/config")
+def read_config():
+    return {
+        "model_path": MODEL_PATH,
+        "api_url": API_URL
+    }
 
 @app.post("/predict")
 def predict(request: PredictRequest):
