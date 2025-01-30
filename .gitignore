@@ -1,2 +1,3 @@
 .venv/*
 source/training/__pycache__/*
+.pytest_cache/*
