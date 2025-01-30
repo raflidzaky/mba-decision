@@ -4,11 +4,14 @@ from pydantic import BaseModel
 import numpy as np
 import pickle
 import asyncio
-
-# TODO: Update the model (making sure it is correcly formated)
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 
 # Initialize API app
 app = FastAPI()
+
+# Serve static files (index.html, JS, CSS, etc.)
+app.mount("/static", StaticFiles(directory="source/static"), name="static")
 
 # Define request body scheme with Pydantic
 class PredictRequest(BaseModel):
@@ -17,7 +20,7 @@ class PredictRequest(BaseModel):
 # Make the model asynchronous (can be handled concurrently)
 async def load_model():
     # Load the model asynchronously to avoid blocking other requests (such as GET request for feature or prediction)
-     return await asyncio.to_thread(pickle.load, open('C:/Users/Rafli/decision-pursue-mba/model_dtree.pkl', 'rb'))
+     return await asyncio.to_thread(pickle.load, open('C:/Users/Rafli/decision-pursue-mba/trained_detree1.pkl', 'rb'))
 
 # Initialized model as None
 ml_model = None
@@ -31,9 +34,11 @@ async def startup_event():
     ml_model = await load_model()
 
 # Say hello for all newcomers in API app
-@app.get("/")
+# But in form of HTML 
+# So, the app needs to read the HTML file
+@app.get("/", response_class=HTMLResponse)
 def read_root():
-    return {"message": "Welcome to the API app!"}
+    return open("source/static/index.html").read()
 
 @app.post("/predict")
 def predict(request: PredictRequest):
