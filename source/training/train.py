@@ -2,6 +2,15 @@ import os
 import pandas as pd
 from train_utils import ConfigLoader, DataLoader, ModelLoader, ModelTrainer
 
+# Manage environment variables
+from dotenv import load_dotenv
+import os
+
+# Load environment configurations:
+load_dotenv()
+CONFIG=os.getenv("CONFIG")
+DATASET=os.getenv("DATASET")
+
 def run_train_pipeline(config_file, data_file):
     # Prepare the configuration and data configuration
     config_loader = ConfigLoader(config_file=config_file)
@@ -30,8 +39,8 @@ def run_train_pipeline(config_file, data_file):
     print(f'Model Accuracy: {accuracy:.4f}')
 
 if __name__ == "__main__":
-    config_file = 'C:/Users/Rafli/decision-pursue-mba/config.yaml'
-    data_file = 'C:/Users/Rafli/decision-pursue-mba/source/training/data/mba_decision_dataset.csv' 
+    config_file = CONFIG
+    data_file = DATASET
     
     # Run the pipeline
     trained_model = run_train_pipeline(config_file, data_file)
