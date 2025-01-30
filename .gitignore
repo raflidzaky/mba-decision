@@ -2,3 +2,4 @@
 source/training/__pycache__/*
 .pytest_cache/*
 source/api/__pycache__/*
+.env
