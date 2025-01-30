@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Prediction</title>
+</head>
+<body>
+    <h1>Make a Prediction</h1>
+
+    <!-- Input form for user to enter feature values -->
+    <form id="predict-form">
+        <label for="entrepreneurial-interest">Entrepreneurial Interest: </label>
+        <input type="number" id="entrepreneurial-interest" name="EntrepreneurialInterest" required><br><br>
+        
+        <label for="networking-importance">Networking Importance: </label>
+        <input type="number" id="networking-importance" name="NetworkingImportance" required><br><br>
+
+        <button type="submit">Get Prediction</button>
+    </form>
+
+    <!-- Where we will display the prediction result -->
+    <h2>Prediction: <span id="prediction-result">--</span></h2>
+
+    <script>
+        // Select the form and result container
+        const form = document.getElementById('predict-form');
+        const predictionResult = document.getElementById('prediction-result');
+
+        // Listen for form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent form from refreshing the page
+
+            // Collect the feature values from the form
+            const feature1 = parseFloat(document.getElementById('entrepreneurial-interest').value);
+            const feature2 = parseFloat(document.getElementById('networking-importance').value);
+
+            // Prepare the features in the format expected by the API
+            const features = [feature1, feature2];
+
+            // Make the POST request with fetch
+            fetch('http://127.0.0.1:8000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "features": features,
+                }),
+            })
+            .then(response => response.json())  // Parse the JSON response
+            .then(data => {
+                // Display the prediction result
+                predictionResult.textContent = data.prediction;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                predictionResult.textContent = 'Error occurred.';
+            });
+        });
+    </script>
+</body>
+</html>
