@@ -3,6 +3,6 @@ PYTHON = python # Windows doesnt treat Python & Python3 the same way. Thus, it m
 ENV = .venv
 
 # Target to run test
-test: test_load.py
+test: source/training/test_load.py
 	@echo "Running tests..."
 	$(PYTHON) -m pytest $(TEST)
